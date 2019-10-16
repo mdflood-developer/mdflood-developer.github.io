@@ -176,3 +176,11 @@ h3 {
         text-align: center;
     }
 }
+
+tr {
+	text-align: center;
+}
+
+td, th {
+  padding: 15px;
+}

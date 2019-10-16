@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A layout example that shows off a blog page with a list of posts.">    <title>Blog &ndash; Layout Examples &ndash; Pure</title>    
+    <meta name="description" content="The project portfolio for Michael Flood, software developer.">    <title>Michael Flood, Developer</title>
     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-" crossorigin="anonymous">
-    
+
     <!--[if lte IE 8]>
         <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-old-ie-min.css">
     <![endif]-->
     <!--[if gt IE 8]><!-->
         <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-min.css">
     <!--<![endif]-->
-    
-    
+
+
         <!--[if lte IE 8]>
             <link rel="stylesheet" href="css/layouts/blog-old-ie.css">
         <![endif]-->
@@ -26,17 +26,13 @@
 <div id="layout" class="pure-g">
     <div class="sidebar pure-u-1 pure-u-md-1-4">
         <div class="header">
-            <h1 class="brand-title">A Sample Blog</h1>
-            <h2 class="brand-tagline">Creating a blog layout using Pure</h2>
+            <h1 class="brand-title">Michael Flood's Portfolio</h1>
+            <h2 class="brand-tagline"></h2>
 
             <nav class="nav">
                 <ul class="nav-list">
                     <li class="nav-item">
-                        <a class="pure-button" href="http://purecss.io">Pure</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="pure-button" href="http://yuilibrary.com">YUI Library</a>
-                    </li>
+                        <a class="pure-button" href="index.html">Home</a>
                 </ul>
             </nav>
         </div>
@@ -51,18 +47,242 @@
                 <!-- A single blog post -->
                 <section class="post">
                     <header class="post-header">
-                        <img width="48" height="48" alt="Tilo Mitra&#x27;s avatar" class="post-avatar" src="img/common/tilo-avatar.png">
-
-                        <h2 class="post-title">Introducing Pure</h2>
+                        <h2 class="post-title">Finding a market for a new Android Game using Python and Pandas</h2>
 
                         <p class="post-meta">
-                            By <a href="#" class="post-author">Tilo Mitra</a> under <a class="post-category post-category-design" href="#">CSS</a> <a class="post-category post-category-pure" href="#">Pure</a>
+                            By <a href="#" class="post-author">Michael Flood</a> under <a class="post-category post-category-design" href="#">Python</a> <a class="post-category post-category-pure" href="#">Data</a>
                         </p>
                     </header>
 
                     <div class="post-description">
                         <p>
-                            Yesterday at CSSConf, we launched Pure – a new CSS library. Phew! Here are the <a href="https://speakerdeck.com/tilomitra/pure-bliss">slides from the presentation</a>. Although it looks pretty minimalist, we’ve been working on Pure for several months. After many iterations, we have released Pure as a set of small, responsive, CSS modules that you can use in every web project.
+                          <b>Overview/Inspiration:</b> As a first data analytics project, I wanted to work on a practical, business-related application, preferably in market research. Once I found this great <a href="https://www.kaggle.com/gauthamp10/google-playstore-apps">Google App Store data set</a> on Kaggle, I knew I had found the basis for my first project.
+
+                        </p>
+                        The idea/motivation/story for the project is this: an Android app developer is trying to decide what type of app to build next and wants to do some market research. They are a small developer and cannot afford to purchase a report from a marketing analysis firm (like this one from Allied Market Research whose lowest access tier costs ~$3,200!) but they can read free samples, press releases, and other open source information. From their research, they draw the following conclusions:
+                        <p>
+                          <ol>
+                            <li>The Google Play Store for Android devices has a commanding lead over Apple’s App Store (take away: they’re going to build their app for Android devices first, then port to iOS if it is successful enough)</li>
+                            <li>Japan and the United States are the largest market for spending on apps and in-app purchases (collectively $44.4 billion) (take away: the app should be built for an English language market, but not be so dependent on language that a Japanese translation would be very expensive or time consuming)</li>
+                            <li>Games account for 41% of downloads, but 88% of spending on app store purchases (take away: the app developer should build a mobile game to maximize monetization possibilities)</li>
+                          </ol>
+
+                        </p>So the developer is going to make their next app a game, initially for the English-language market, and they are going to develop it first for Android devices. That still leaves unanswered what kind of game to make.<p>
+
+                        </p>To increase their odds of finding a market and achieving a profit, the app developer will have to pick the right market. Unseating top-tier games like Clash of Clans without a multi-million dollar marketing budget (something definitely out of their price range) is out of the question, so they need to find a game category where there is a ‘healthy middle’ - lots of middle-tier games with between between 1 million+ and 50 million+ installs. That’s a market that a new app can enter and find its niche, developing a base of players and achieving profitability. While the developer would love to create the next Candy Crush, its costs are such that it can be profitable with a million installs, with the number of active users dependent on its monetization model.<p>
+
+                        </p><b>The Data</b></p>
+                        <p>The data set is from April 2019, so it is not current. For the purposes of this proof-of-concept analysis, however, that is not important: once the workflow is set up, the Play Store pages can be scraped and rescraped at regular intervals to get the most up to date information (using the web scraping code that the original data uploaders helpfully provided on Github)</p>
+
+                        <pp>The data consists of the following categories and data types:</p>
+
+                        <p><ul>
+                          <li>App Name - self explanatory</li>
+                          <li>Category - self explanatory. We’ll be singling out ones with “GAME” for obvious reasons.</li>
+                          <li>Ratings - average ratings of the app from Play Store users</li>
+                          <li>Reviews - total # of reviews of an app. We’ll investigate what correlation there is between # of Installs, # of reviews, and average rating.</li>
+                          <li>Installs - a specification of a range of downloads (500,000+, for example). This will be a key variable for us, one we’ll need to convert to a float in order to work with. We’re going to use it later on to find out both the total number of installs in a category. We will make the assumption that Installs tracks currently installed apps, rather than whether an app has ever been installed.</li>
+                          <li>Size - the size of the app in megabytes. Less than useful for our purposes, especially as many of them are “Varies with device”.</li>
+                          <li>Price - the price of the app. Not immediately useful, but worth having along for further analysis within a chosen category.</li>
+                          <li>Content Rating - the audience for the app. Unless there is strong reason to do otherwise, the developer will probably focus on making an app for “Everyone” to maximize revenue.</li>
+                          <li>Last Updated - in a future analysis we may want to filter out old apps (those that have not been maintained for >12 months) because that is a likely indicator they have low or zero regular users.</li>
+                          <li>Minimum version (string) - minimum version of Android needed to run the app. Not relevant to our purpose here.</li>
+                          <li>Latest version (string) - most recent version of the app. Again, not relevant.</li>
+                        </ul></p>
+                        <p>For our purposes, we only care about the following:</p>
+                        <p>
+                          <ul>
+                            <li>App Name</li>
+                            <li>Category</li>
+                            <li>Rating</li>
+                            <li>Reviews</li>
+                            <li>Installs</li>
+                            <li>Price</li>
+                            <li>Last Updated</li>
+                          </ul>
+                        </p>
+                        <p><b>Research Question: </b><br> <em>In which app categories do games with between 1 million+ and 50 million+ installs make up > 35% of the market?</em></p>
+                        <p>
+                          <b>Analysis</b>
+                        </p>
+                        <p>
+                          I processed the data using Python’s pandas module, with the following steps:
+                          <ol>
+                            <li>Import the data into a pandas DataFrame, using only the relevant columns and rendering all the columns as string values (to avoid headaches dealing with null values and format conversion problems).</li>
+                          <li>Run functions on the DataFrame to clean the data (converting string representations to floating points, clearing null values from categories, etc.)</li>
+                          <li>Extract all the unique category names, filtering them to find only those that contain the string ‘GAME’</li>
+                          <li>Create a second DataFrame with just the categories extracted in step (3)</li>
+                          <li>Extract information from the second DataFrame to find out how many games are in each category, what their total number of installs is, and how many games are in each tier of installs.</li>
+                          <li>Place the information extracted in 5 in a third DataFrame</li>
+                          <li>Finally, pick out how many games are between 1M to 50M installs, and what % of the total games in the category they represent.</li>
+                          </ol>
+                        </p>
+                        <p>
+                          To see the code and get a more detailed look at the analysis process, please see the project’s <a href="https://www.kaggle.com/developermdflood/google-app-store-market-research">Kaggle notebook</a>. I extracted the table shown below by exporting to Excel and deleting intermediate columns.
+                        </p>
+                        <p>
+                          <b>Results</b>
+                        </p>
+                        <p>Here is our final table, filtered to exclude irrelevant columns, and sorted from highest ‘Middle %’ to lowest:</p>
+                        <p>
+                          <table border="0" cellpadding="0" cellspacing="0" id="sheet0" class="pure-table">
+        <col class="col0">
+        <col class="col1">
+        <col class="col2">
+        <col class="col3">
+        <col class="col4">
+        <tbody>
+          <tr class="row0">
+            <td class="column0 style0 s">Name</td>
+            <td class="column1 style0 s">Total Games</td>
+            <td class="column2 style0 s">Total Installs</td>
+            <td class="column3 style0 s">1M to 50M</td>
+            <td class="column4 style0 s">Middle %</td>
+          </tr>
+          <tr class="row1">
+            <td class="column0 style0 s">GAME_RACING</td>
+            <td class="column1 style0 n">778</td>
+            <td class="column2 style0 s">4,310,328,998</td>
+            <td class="column3 style0 n">368</td>
+            <td class="column4 style0 n" style="background-color: red">47.3%</td>
+          </tr>
+          <tr class="row2">
+            <td class="column0 style0 s">GAME_CASINO</td>
+            <td class="column1 style0 n">367</td>
+            <td class="column2 style0 s">649,357,915</td>
+            <td class="column3 style0 n">145</td>
+            <td class="column4 style0 n" style="background-color: red">39.5%</td>
+          </tr>
+          <tr class="row3">
+            <td class="column0 style0 s">GAME_ACTION</td>
+            <td class="column1 style0 n">1482</td>
+            <td class="column2 style0 s">6,022,179,342</td>
+            <td class="column3 style0 n">580</td>
+            <td class="column4 style0 n" style="background-color: red">39.1%</td>
+          </tr>
+          <tr class="row4">
+            <td class="column0 style0 s">GAME_SPORTS</td>
+            <td class="column1 style0 n">772</td>
+            <td class="column2 style0 s">2,764,157,050</td>
+            <td class="column3 style0 n">289</td>
+            <td class="column4 style0 n" style="background-color: red">37.4%</td>
+          </tr>
+          <tr class="row5">
+            <td class="column0 style0 s">GAME_SIMULATION</td>
+            <td class="column1 style0 n">1607</td>
+            <td class="column2 style0 s">2,904,098,810</td>
+            <td class="column3 style0 n">559</td>
+            <td class="column4 style0 n">34.8%</td>
+          </tr>
+          <tr class="row6">
+            <td class="column0 style0 s">GAME_MUSIC</td>
+            <td class="column1 style0 n">253</td>
+            <td class="column2 style0 s">574,026,625</td>
+            <td class="column3 style0 n">81</td>
+            <td class="column4 style0 n">32.0%</td>
+          </tr>
+          <tr class="row7">
+            <td class="column0 style0 s">GAME_STRATEGY</td>
+            <td class="column1 style0 n">913</td>
+            <td class="column2 style0 s">2,322,707,153</td>
+            <td class="column3 style0 n">289</td>
+            <td class="column4 style0 n">31.7%</td>
+          </tr>
+          <tr class="row8">
+            <td class="column0 style0 s">GAME_ROLE_PLAYING</td>
+            <td class="column1 style0 n">1035</td>
+            <td class="column2 style0 s">1,179,363,260</td>
+            <td class="column3 style0 n">305</td>
+            <td class="column4 style0 n">29.5%</td>
+          </tr>
+          <tr class="row9">
+            <td class="column0 style0 s">GAME_CASUAL</td>
+            <td class="column1 style0 n">2426</td>
+            <td class="column2 style0 s">6,540,639,015</td>
+            <td class="column3 style0 n">685</td>
+            <td class="column4 style0 n">28.2%</td>
+          </tr>
+          <tr class="row10">
+            <td class="column0 style0 s">GAME_ARCADE</td>
+            <td class="column1 style0 n">2343</td>
+            <td class="column2 style0 s">6,936,162,808</td>
+            <td class="column3 style0 n">575</td>
+            <td class="column4 style0 n">24.5%</td>
+          </tr>
+          <tr class="row11">
+            <td class="column0 style0 s">GAME_CARD</td>
+            <td class="column1 style0 n">1183</td>
+            <td class="column2 style0 s">946,429,516</td>
+            <td class="column3 style0 n">264</td>
+            <td class="column4 style0 n">22.3%</td>
+          </tr>
+          <tr class="row12">
+            <td class="column0 style0 s">GAME_WORD</td>
+            <td class="column1 style0 n">946</td>
+            <td class="column2 style0 s">990,361,627</td>
+            <td class="column3 style0 n">200</td>
+            <td class="column4 style0 n">21.1%</td>
+          </tr>
+          <tr class="row13">
+            <td class="column0 style0 s">GAME_BOARD</td>
+            <td class="column1 style0 n">968</td>
+            <td class="column2 style0 s">1,121,928,280</td>
+            <td class="column3 style0 n">193</td>
+            <td class="column4 style0 n">19.9%</td>
+          </tr>
+          <tr class="row14">
+            <td class="column0 style0 s">GAME_ADVENTURE</td>
+            <td class="column1 style0 n">1055</td>
+            <td class="column2 style0 s">1,219,219,638</td>
+            <td class="column3 style0 n">208</td>
+            <td class="column4 style0 n">19.7%</td>
+          </tr>
+          <tr class="row15">
+            <td class="column0 style0 s">GAME_PUZZLE</td>
+            <td class="column1 style0 n">3620</td>
+            <td class="column2 style0 s">4,287,170,611</td>
+            <td class="column3 style0 n">698</td>
+            <td class="column4 style0 n">19.3%</td>
+          </tr>
+          <tr class="row16">
+            <td class="column0 style0 s">GAME_EDUCATIONAL</td>
+            <td class="column1 style0 n">2007</td>
+            <td class="column2 style0 s">1,236,406,695</td>
+            <td class="column3 style0 n">355</td>
+            <td class="column4 style0 n">17.7%</td>
+          </tr>
+          <tr class="row17">
+            <td class="column0 style0 s">GAME_TRIVIA</td>
+            <td class="column1 style0 n">753</td>
+            <td class="column2 style0 s">456,940,929</td>
+            <td class="column3 style0 n">96</td>
+            <td class="column4 style0 n">12.8%</td>
+          </tr>
+        </tbody>
+    </table>
+                        </p>
+                        <p>
+                          Four categories (highlighted in red) match our criteria. They are:
+                        </p>
+                        <p>
+                          <ul>
+                            <li>Racing</li>
+                            <li>Casino</li>
+                            <li>Action</li>
+                            <li>Sports</li>
+                          </ul>
+                        </p>
+                        <p>
+                          In the Racing category, nearly 50% of the games are mid-tier, belonging to the "happy middle" we were seeking. As a result, I would advise the app developer to investigate making a racing game as their next Android project.
+                        </p>
+                        <p>
+                          <b>Limitations</b><br>
+                          <ol>
+                            <li>The data is from 2019 (as noted above) and the analysis should be rerun on newly scraped data, preferably at regular intervals to capture market trends.</li>
+                            <li>The # of installs is categorical rather than quantitative - the precise number of installs for each game is not made reported, only the ‘tier’ of installs. So we can know, for instance,  whether a game has between 1,000,000 and 9,999,999 installs, but not the exact number of installs.</li>
+                            <li>The data does not contain information on the usage of the apps. In the same way that the data shows a high skew where a few apps have most of the installs in a given category, it is overwhelmingly likely that a few apps in each category garner most of the playing time. This is important when considering monetization methods like in-app purchases or advertisements.</li>
+                          </ol>
+
                         </p>
                     </div>
                 </section>
@@ -75,10 +295,10 @@
                     <header class="post-header">
                         <img width="48" height="48" alt="Eric Ferraiuolo&#x27;s avatar" class="post-avatar" src="img/common/ericf-avatar.png">
 
-                        <h2 class="post-title">Everything You Need to Know About Grunt</h2>
+                        <h2 class="post-title">Post Title</h2>
 
                         <p class="post-meta">
-                            By <a class="post-author" href="#">Eric Ferraiuolo</a> under <a class="post-category post-category-js" href="#">JavaScript</a>
+                            By <a class="post-author" href="#">Michael Flood</a> under <a class="post-category post-category-js" href="#">Python</a>
                         </p>
                     </header>
 
@@ -89,63 +309,6 @@
                     </div>
                 </section>
 
-                <section class="post">
-                    <header class="post-header">
-                        <img width="48" height="48" alt="Reid Burke&#x27;s avatar" class="post-avatar" src="img/common/reid-avatar.png">
-
-                        <h2 class="post-title">Photos from CSSConf and JSConf</h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Reid Burke</a> under <a class="post-category" href="#">Uncategorized</a>
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        <div class="post-images pure-g">
-                            <div class="pure-u-1 pure-u-md-1-2">
-                                <a href="http://www.flickr.com/photos/uberlife/8915936174/">
-                                    <img alt="Photo of someone working poolside at a resort"
-                                         class="pure-img-responsive"
-                                         src="http://farm8.staticflickr.com/7448/8915936174_8d54ec76c6.jpg">
-                                </a>
-
-                                <div class="post-image-meta">
-                                    <h3>CSSConf Photos</h3>
-                                </div>
-                            </div>
-
-                            <div class="pure-u-1 pure-u-md-1-2">
-                                <a href="http://www.flickr.com/photos/uberlife/8907351301/">
-                                    <img alt="Photo of the sunset on the beach"
-                                         class="pure-img-responsive"
-                                         src="http://farm8.staticflickr.com/7382/8907351301_bd7460cffb.jpg">
-                                </a>
-
-                                <div class="post-image-meta">
-                                    <h3>JSConf Photos</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="post">
-                    <header class="post-header">
-                        <img width="48" height="48" alt="Andrew Wooldridge&#x27;s avatar" class="post-avatar" src="img/common/andrew-avatar.png">
-
-                        <h2 class="post-title">YUI 3.10.2 Released</h2>
-
-                        <p class="post-meta">
-                            By <a class="post-author" href="#">Andrew Wooldridge</a> under <a class="post-category post-category-yui" href="#">YUI</a>
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        <p>
-                            We are happy to announce the release of YUI 3.10.2! You can find it now on the Yahoo! CDN, download it directly, or pull it in via npm. We’ve also updated the YUI Library website with the latest documentation.
-                        </p>
-                    </div>
-                </section>
             </div>
 
             <div class="footer">
